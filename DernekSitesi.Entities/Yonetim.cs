@@ -2,7 +2,7 @@
 
 namespace DernekSitesi.Entities
 {
-	public class Yonetim
+	public class Yonetim : IEntity
 	{
 		public int Id { get; set; }
 
