@@ -2,6 +2,7 @@
 using DernekSitesi.Service.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DernekSitesi.WebUI.Areas.Admin.Controllers
 {
@@ -10,16 +11,19 @@ namespace DernekSitesi.WebUI.Areas.Admin.Controllers
 	public class UsersController : Controller
 	{
 		private readonly IService<User> _service;
+		private readonly IService<Rol> _serviceRol;
 
-		public UsersController(IService<User> service)
-		{
-			_service = service;
-		}
+        public UsersController(IService<User> service, IService<Rol> serviceRol)
+        {
+            _service = service;
+            _serviceRol = serviceRol;
+        }
 
-		// GET: UsersController
-		public ActionResult Index()
+        // GET: UsersController
+        public async Task<ActionResult> IndexAsync()
 		{
-			return View();
+			var model = await _service.GetAllAsync();
+			return View(model);
 		}
 
 		// GET: UsersController/Details/5
@@ -29,60 +33,80 @@ namespace DernekSitesi.WebUI.Areas.Admin.Controllers
 		}
 
 		// GET: UsersController/Create
-		public ActionResult Create()
+		public async Task<ActionResult> CreateAsync()
 		{
+			ViewBag.RolId = new SelectList(await _serviceRol.GetAllAsync(),"Id","Name");
 			return View();
 		}
 
 		// POST: UsersController/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
+		public async Task<ActionResult> CreateAsync(User user)
 		{
-			try
+			if (ModelState.IsValid)
 			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+                try
+                {
+                    await _service.AddAsync(user);
+                    await _service.SaveAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+					ModelState.AddModelError("","Hata Oluştu!");
+                }
+            }
+            ViewBag.RolId = new SelectList(await _serviceRol.GetAllAsync(), "Id", "Name");
+            return View(user);
 		}
 
 		// GET: UsersController/Edit/5
-		public ActionResult Edit(int id)
+		public async Task<ActionResult> EditAsync(int id)
 		{
-			return View();
+			var model = await _service.FindAsync(id);
+            ViewBag.RolId = new SelectList(await _serviceRol.GetAllAsync(), "Id", "Name");
+            return View(model);
 		}
 
 		// POST: UsersController/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
+		public async Task<ActionResult> EditAsync(int id, User user)
 		{
-			try
-			{
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
-		}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _service.Update(user);
+                    await _service.SaveAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
+            ViewBag.RolId = new SelectList(await _serviceRol.GetAllAsync(), "Id", "Name");
+            return View(user);
+        }
 
 		// GET: UsersController/Delete/5
-		public ActionResult Delete(int id)
+		public async Task<ActionResult> DeleteAsync(int id)
 		{
-			return View();
+			var model = await _service.FindAsync(id);
+			return View(model);
 		}
 
 		// POST: UsersController/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
+		public ActionResult Delete(int id, User user)
 		{
 			try
 			{
+				_service.Delete(user);
+				_service.Save();
 				return RedirectToAction(nameof(Index));
 			}
 			catch

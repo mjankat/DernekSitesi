@@ -14,6 +14,7 @@ namespace DernekSitesi.Data
 		public DbSet<Haber> Haberler { get; set; }
 		public DbSet<Yonetim> Yonetimdekiler { get; set; }
 		public DbSet<User> Users { get; set; }
+		public DbSet<Rol> Roles { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -22,7 +23,12 @@ namespace DernekSitesi.Data
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<User>().HasData(new User
+            modelBuilder.Entity<Rol>().HasData(new Rol
+            {
+                Id = 1,
+                Name = "Admin"               
+            });
+            modelBuilder.Entity<User>().HasData(new User
 			{
 				Id = 1,
 				Name = "Admin",
@@ -31,7 +37,8 @@ namespace DernekSitesi.Data
 				Email = "musistisaremeclisi@gmail.com",
 				Password = "yc123456",
 				IsActive = true,
-				CreateDate = DateTime.Now
+				CreateDate = DateTime.Now,
+				RolId = 1
 			});
 			base.OnModelCreating(modelBuilder);
 		}

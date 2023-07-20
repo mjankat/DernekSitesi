@@ -4,6 +4,7 @@ using DernekSitesi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DernekSitesi.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230720145140_HasDataUpdate")]
+    partial class HasDataUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +169,7 @@ namespace DernekSitesi.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2023, 7, 20, 18, 44, 29, 203, DateTimeKind.Local).AddTicks(1551),
+                            CreateDate = new DateTime(2023, 7, 20, 17, 51, 40, 18, DateTimeKind.Local).AddTicks(526),
                             Email = "musistisaremeclisi@gmail.com",
                             IsActive = true,
                             Name = "Admin",

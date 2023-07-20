@@ -6,10 +6,10 @@ namespace DernekSitesi.Entities
 	{
 		public int Id { get; set; }
 
-		[Display(Name = "Adı"), StringLength(100)]
+		[Display(Name = "Adı"), StringLength(100), Required(ErrorMessage = "{0} Boş Bırakılamaz")]
 		public string Name { get; set; }
 
-		[Display(Name = "Soyadı"), StringLength(100)]
+		[Display(Name = "Soyadı"), StringLength(100), Required(ErrorMessage = "{0} Boş Bırakılamaz")]
 		public string Surname { get; set; }
 
 		[Display(Name = "Görevi")]

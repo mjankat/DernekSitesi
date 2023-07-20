@@ -6,7 +6,7 @@ namespace DernekSitesi.Entities
 	{
 		public int Id { get; set; }
 
-		[Display(Name = "Etkinlik Adı"), StringLength(100)]
+		[Display(Name = "Etkinlik Adı"), StringLength(100), Required(ErrorMessage = "{0} Boş Bırakılamaz")]
 		public string Name { get; set; }
 
 		[Display(Name = "Etkinlik Açıklaması")]
